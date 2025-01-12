@@ -1,0 +1,191 @@
+:root {
+  --admin-theme-font-color: 0deg 0% 15%;
+  --admin-theme-color: #007cba;
+  --admin-theme-edge-tb: 4rem;
+  --admin-theme-video-sb: 35px;
+  --admin-theme-radius: 16px;
+  --admin-theme-bg: hsl(var(--admin-theme-font-color) / 4%)
+}
+
+.contact-thyuu-embed-container {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow, 0 0 #0000);
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(229 231 235 / var(--tw-ring-opacity));
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: .75em
+}
+
+.contact-thyuu-embed-container--selected {
+  --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+  --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+  box-shadow: var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow, 0 0 #0000);
+  --tw-ring-color: inherit
+}
+
+.contact-thyuu-embed-nav {
+  border-bottom: 1px #e7e7e7 solid;
+  display: flex;
+  padding: 5px 10px;
+  align-items: center
+}
+
+.contact-thyuu-embed-nav-start {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px
+}
+
+.contact-thyuu-embed-nav-end {
+  justify-content: flex-end
+}
+
+.contact-thyuu-embed-preview {
+  padding: 5px 10px
+}
+
+.thyuu-embed-setin {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 12px;
+  gap: 1em;
+  padding: 2em;
+  align-items: center;
+  line-height: 1;
+}
+
+.thyuu-embed-edite-head {
+  font-size: 1em;
+  background: 0;
+  flex: 100%;
+}
+
+.thyuu-embed-edite-head summary {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.thyuu-embed-edite-head summary :is(i, h5),.contact-thyuu-embed-nav-start :is(i, h5) {
+  display: inline-flex !important;
+  align-items: center;
+  font-size: 13px;
+  gap: .5em;
+  margin: 0;
+}
+
+.contact-thyuu-embed-nav-start :is(i, h5) {
+  display: inline-flex !important;
+  align-items: center;
+  font-size: 13px;
+  gap: .5em;
+  margin: 0 !important;
+}
+
+.thyuu-embed-edite-head summary :is(i){
+  cursor: pointer;
+  pointer-events: auto;
+  font-size: 1em;
+  line-height: 1;
+  color: #1E1E1E;
+}
+
+.thyuu-embed-setin details h6 {
+  margin: 2em 0 1em;
+  font-size: 1em;
+  color: #1E1E1E;
+}
+
+.thyuu-embed-setin details ul {
+  padding: .5em 2em;
+  color: hsl(0deg 0% 0% / 50%);
+  background: hsl(var(--admin-theme-font-color) / 4%);
+  border-radius: 1em;
+  cursor: auto;
+}
+
+.thyuu-embed-setin details ul i {
+  color: var(--wp-components-color-accent, var(--admin-theme-color, #3858e9));
+}
+
+.thyuu-embed-setin details ul li {
+  line-height: 1.675;
+  font-size: 12px;
+}
+
+.thyuu-embed-setin input[type="url"] {
+  flex: auto;
+  min-width: 30ch;
+}
+
+.thyuu-embed-setin :is(input[type="url"], select) {
+  color: var(--wp-components-color-foreground, #1e1e1e);
+  border-color: var(--wp-components-color-gray-600, #949494);
+  font-size: inherit;
+  min-height: 40px;
+}
+
+thyuu-embed {
+  display: block;
+}
+
+thyuu-embed iframe {
+  width: 100%;
+}
+
+.thyuu-music {
+  width: 100%;
+  height: 65px;
+  outline: thin solid var(--admin-theme-bg);
+  border-radius: var(--admin-theme-radius);
+  overflow: hidden;
+}
+.thyuu-music:is([data-type="nn_lists"], [data-type="nn_album"]) {
+  height: 390px;
+}
+
+.thyuu-video[data-type="dy"] {
+  --admin-theme-video-sb: 35px;
+}
+
+.thyuu-video {
+  position: relative;
+  display: grid;
+  place-items: center;
+  place-content: center;
+  width: 100%;
+  max-height: calc(70vh - var(--admin-theme-edge-tb));
+  padding-top: calc(var(--video-as, 56.25%) + var(--admin-theme-video-sb, 0%));
+  outline: thin solid var(--admin-theme-bg);
+  background: #000;
+  border-radius: var(--admin-theme-radius);
+  overflow: hidden;
+}
+
+.thyuu-video iframe {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  z-index: 2;
+}
+.thyuu-video[data-type="dy"] {
+  --video-sb: 35px;
+}
+.thyuu-video[data-type="dy"].as-tb {
+  --video-as: 72%;
+  --video-sb: -48px;
+  width: min(324px, 100%);
+  max-height: none;
+  margin-inline: auto;
+}
+
+.thyuu-video span {
+  color: hsl(var(--admin-theme-font-color) / .5);
+  font-size: .75rem;
+}
+
