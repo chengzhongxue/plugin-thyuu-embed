@@ -6,7 +6,7 @@ import {
   type Range,
   VueNodeViewRenderer,
   type EditorState,
-  type DOMOutputSpec
+  type DOMOutputSpec, mergeAttributes
 } from "@halo-dev/richtext-editor";
 import { markRaw } from "vue";
 import { ToolboxItem } from "@halo-dev/richtext-editor";
@@ -15,19 +15,18 @@ import BlockActionSeparator from "../components/BlockActionSeparator.vue";
 import MdiDeleteForeverOutline from "~icons/mdi/delete-forever-outline?color=red";
 import { deleteNode } from "../utils/delete-node";
 import IconMusic from "@/icon/IconMusic.vue";
-import {thyuuShortcodeMusic} from "@/utils/music";
 import MusicView from "@/editor/MusicView.vue";
 
 declare module "@halo-dev/richtext-editor" {
   interface Commands<ReturnType> {
-    "thyuu-embed-music": {
+    "thyuu-music": {
       setMusic: (options: { src: string }) => ReturnType;
     };
   }
 }
 
 const MusicExtension = Node.create({
-  name: "thyuu-embed-music",
+  name: "thyuu-music",
   fakeSelection: true,
 
   group() {
@@ -52,80 +51,13 @@ const MusicExtension = Node.create({
   parseHTML() {
     return [
       {
-        tag: "thyuu-embed-music",
+        tag: "thyuu-music",
       },
     ];
   },
 
   renderHTML({ node,HTMLAttributes }) {
-    var src = node?.attrs.src;
-    const music = thyuuShortcodeMusic(src);
-    if (music == null || music == undefined) {
-      return [
-        'thyuu-embed-music',
-        { class: 'thyuu-noone icon-music', src: src},
-        '链接无法识别',
-        ['br'],
-        src || '',
-      ];
-    }else {
-      let iframe: DOMOutputSpec =[
-        "thyuu-embed-music",
-        { class: "thyuu-music", 'data-type': music.type,src: src},
-        [
-          "iframe",
-          {
-            src: music.src,
-            loading:"lazy",
-            allowtransparency:"true"
-          }
-        ],
-      ];
-      if (music.type == 'nn' || music.type == 'nn_on_app') {
-        iframe = [
-          "thyuu-embed-music",
-          { class: "thyuu-music", 'data-type': music.type,src: src},
-          [
-            "div",
-            {style:'margin:-11px'},
-            [
-              "iframe",
-              {
-                src: music.src+'&height=66',
-                loading:"lazy",
-                allowtransparency:"true"
-              }
-            ],
-          ],
-        ];
-      }
-
-      if (music.type == 'nn_lists' || music.type == 'nn_album' || music.type == 'nn_lists_on_app' || music.type == 'nn_album_on_app') {
-        iframe = [
-          "thyuu-embed-music",
-          { class: "thyuu-music", 'data-type': music.type,src: src},
-          [
-            "div",
-            {style:'margin:-11px'},
-            [
-              "iframe",
-              {
-                marginwidth:'0',
-                marginheight:'0',
-                width:'330',
-                height:'450',
-                src: music.src+'&height=430',
-                loading:"lazy",
-                allowtransparency:"true"
-              }
-            ],
-          ],
-        ];
-      }
-      
-      
-      return iframe;
-    }
+    return ["thyuu-music", mergeAttributes(HTMLAttributes)];
     
   },
   addCommands() {
@@ -150,7 +82,7 @@ const MusicExtension = Node.create({
   addInputRules() {
     return [
       nodeInputRule({
-        find: /^\$thyuu-embed-music\$$/,
+        find: /^\$thyuu-music\$$/,
         type: this.type,
         getAttributes: (e) => ({ 
           src: e[1] 
@@ -170,7 +102,7 @@ const MusicExtension = Node.create({
           priority: 2e2,
           icon: markRaw(IconMusic),
           title: "THYUU / 嵌入音乐",
-          keywords: ["thyuu-embed-music", "thyuu", "嵌入音乐"],
+          keywords: ["thyuu-music", "thyuu", "嵌入音乐"],
           command: ({ editor, range }: { editor: Editor; range: Range }) => {
             editor
               .chain()
@@ -201,7 +133,7 @@ const MusicExtension = Node.create({
       },
       getBubbleMenu({ editor }: { editor: Editor }) {
         return {
-          pluginKey: "thyuu-embed-music-bubble-menu",
+          pluginKey: "thyuu-music-bubble-menu",
           shouldShow: ({ state }: { state: EditorState }) => {
             return isActive(state, MusicExtension.name);
           },

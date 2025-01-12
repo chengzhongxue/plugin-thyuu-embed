@@ -5,7 +5,7 @@ import {
   nodeInputRule,
   type Range,
   VueNodeViewRenderer,
-  type EditorState, getNodeAttributes,
+  type EditorState, getNodeAttributes, mergeAttributes,
 } from "@halo-dev/richtext-editor";
 import { markRaw } from "vue";
 import { ToolboxItem } from "@halo-dev/richtext-editor";
@@ -17,18 +17,17 @@ import VideoView from "./VideoView.vue";
 import IconVideo from "@/icon/IconVideo.vue";
 import VideoViewBubbleMenuItem from "@/components/VideoViewBubbleMenuItem.vue";
 import videoViewTypes from "@/editor/video-view-type";
-import {thyuuShortcodeVideo} from "@/utils/video";
 
 declare module "@halo-dev/richtext-editor" {
   interface Commands<ReturnType> {
-    "thyuu-embed-video": {
+    "thyuu-video": {
       setVideo: (options: { src: string }) => ReturnType;
     };
   }
 }
 
 const VideoExtension = Node.create({
-  name: "thyuu-embed-video",
+  name: "thyuu-video",
   fakeSelection: true,
 
   group() {
@@ -62,41 +61,13 @@ const VideoExtension = Node.create({
   parseHTML() {
     return [
       {
-        tag: "thyuu-embed-video",
+        tag: "thyuu-video",
       },
     ];
   },
 
-  renderHTML({ node,HTMLAttributes }) {
-    var src = node?.attrs.src;
-    var size = node?.attrs.size;
-    const video = thyuuShortcodeVideo(src);
-    if (video == null || video == undefined) {
-      return [
-        'thyuu-embed-video',
-        { class: 'thyuu-noone icon-film', src: src,size: size},
-        '链接无法识别',
-        ['br'],
-        src || '',
-      ];
-    }else {
-      return [
-        "thyuu-embed-video",
-        { class: "thyuu-video as-"+(size == null ? '' : size), 'data-type': video.type,src: src,size: size},
-        ["iframe",
-          {
-            src: video.src,
-            loading:"lazy",
-            scrolling:"no",
-            referrerpolicy:"unsafe-url",
-            allow:"autoplay; encrypted-media",
-            allowtransparency:"true",
-            allowfullscreen:"true"
-          }
-        ]
-      ];
-    }
-    
+  renderHTML({HTMLAttributes }) {
+    return ["thyuu-video", mergeAttributes(HTMLAttributes)];
   },
   addCommands() {
     return {
@@ -120,7 +91,7 @@ const VideoExtension = Node.create({
   addInputRules() {
     return [
       nodeInputRule({
-        find: /^\$thyuu-embed-video\$$/,
+        find: /^\$thyuu-video\$$/,
         type: this.type,
         getAttributes: (e) => ({ 
           src: e[1] 
@@ -140,7 +111,7 @@ const VideoExtension = Node.create({
           priority: 2e2,
           icon: markRaw(IconVideo),
           title: "THYUU / 嵌入视频",
-          keywords: ["thyuu-embed-video", "thyuu", "嵌入视频"],
+          keywords: ["thyuu-video", "thyuu", "嵌入视频"],
           command: ({ editor, range }: { editor: Editor; range: Range }) => {
             editor
               .chain()
@@ -171,7 +142,7 @@ const VideoExtension = Node.create({
       },
       getBubbleMenu({ editor }: { editor: Editor }) {
         return {
-          pluginKey: "thyuu-embed-video-bubble-menu",
+          pluginKey: "thyuu-video-bubble-menu",
           shouldShow: ({ state }: { state: EditorState }) => {
             return isActive(state, VideoExtension.name);
           },
