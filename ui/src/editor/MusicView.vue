@@ -2,14 +2,13 @@
 import type {NodeViewProps} from "@halo-dev/richtext-editor";
 import { NodeViewWrapper } from "@halo-dev/richtext-editor";
 import {computed, onMounted, ref, watch} from "vue";
-import {Toast} from "@halo-dev/components";
 import {type Musicatts, thyuuShortcodeMusic} from "@/utils/music";
 import IconMusic from "@/icon/IconMusic.vue";
 
 
 const props = defineProps<NodeViewProps>();
 
-const musicatts = ref<Musicatts | undefined>();
+const music = ref<Musicatts | undefined>();
 
 const src = computed({
   get: () => {
@@ -34,12 +33,8 @@ onMounted(() => {
 });
 
 function getMusic(url: string) {
-  const music = thyuuShortcodeMusic(url);
-  if (music) {
-    musicatts.value = music
-  } else {
-    Toast.error("嵌入音乐，链接无法识别");
-  }
+  music.value = thyuuShortcodeMusic(url);
+
 }
 
 watch(
@@ -51,11 +46,6 @@ watch(
   }
 );
 
-const handleResetInit = () => {
-  props.updateAttributes({src: ""});
-  musicatts.value = undefined; 
-};
-
 </script>
 
 <template>
@@ -63,7 +53,7 @@ const handleResetInit = () => {
                      :class="{
         'contact-thyuu-embed-container--selected': selected,
       }">
-    <div class="thyuu-embed-setin"  v-if="!src || musicatts==undefined">
+    <div class="thyuu-embed-setin">
       <details class="thyuu-embed-edite-head">
         <summary>
           <h5 class="icon-film"><i><IconMusic/></i>THYUU / 嵌入音乐</h5>
@@ -88,20 +78,8 @@ const handleResetInit = () => {
         tabindex="-1"
         @focus="handleSetFocus"
       />
-    </div>
-    <div v-else class="group relative">
-      <div class="contact-thyuu-embed-nav">
-        <div class="contact-thyuu-embed-nav-start">
-          <h5 class="icon-film"><i><IconMusic/></i>THYUU / 嵌入音乐</h5>
-        </div>
-        <div class="contact-thyuu-embed-nav-end">
-          <button @click="handleResetInit"
-                  class="btn-sm btn-default btn" type="button">
-            <span class="btn-content">更换</span>
-          </button>
-        </div>
-      </div>
-      <div class="contact-thyuu-embed-preview" v-html="musicatts.iframe"></div>
+      <thyuu-embed v-if="music != undefined" class="thyuu-music" :data-type="music.type" v-html="music.iframe"></thyuu-embed>
+      <thyuu-embed v-else-if="src" class="thyuu-noone icon-music">链接无法识别<br>{{src}}</thyuu-embed>
     </div>
   </node-view-wrapper>
 </template>

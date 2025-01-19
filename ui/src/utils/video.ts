@@ -5,7 +5,7 @@ export interface Videoatts {
 
 type VideoType = 'bb' | 'bb_live' | 'dy' | 'xg' | 'qq' | 'qq_page' | 'yk';
 
-export function thyuuShortcodeVideo(url: string): Videoatts | null {
+export function thyuuShortcodeVideo(url: string): Videoatts | undefined {
   const patterns: { [key in VideoType]: RegExp } = {
     bb: /https?:\/\/www\.bilibili\.com\/video\/(BV\w+)/,
     bb_live: /https?:\/\/live\.bilibili\.com\/(\d+)/,
@@ -28,7 +28,7 @@ export function thyuuShortcodeVideo(url: string): Videoatts | null {
     }
   }
 
-  if (!url || !id) return null;
+  if (!url || !id) return undefined;
 
   let src: string = '';
 
@@ -40,7 +40,7 @@ export function thyuuShortcodeVideo(url: string): Videoatts | null {
     case 'qq_page': src = `https://v.qq.com/txp/iframe/player.html?vid=${id}`; break;
     case 'yk': src = `https://player.youku.com/embed/${id}`; break;
     case 'xg': src = `https://www.ixigua.com/iframe/${id}`; break;
-    default: return null;
+    default: return undefined;
   }
 
   return {

@@ -1,12 +1,11 @@
 export interface Musicatts {
   type: string;
-  src: string;
   iframe: string;
 }
 
 type MusicType = 'nn' | 'nn_lists' | 'nn_album' | 'nn_on_app' | 'nn_lists_on_app' | 'nn_album_on_app' | 'qq';
 
-export function thyuuShortcodeMusic(url: string): Musicatts | null {
+export function thyuuShortcodeMusic(url: string): Musicatts | undefined {
   const patterns: { [key in MusicType]: RegExp } = {
     nn: /https?:\/\/music\.163\.com\/#\/song\?id=(\d+)/,
     nn_lists: /https?:\/\/music\.163\.com\/#\/playlist\?id=(\d+)/,
@@ -29,7 +28,7 @@ export function thyuuShortcodeMusic(url: string): Musicatts | null {
     }
   }
 
-  if (!url || !id) return null;
+  if (!url || !id) return undefined;
 
   let src: string;
   let iframe: string;
@@ -51,12 +50,11 @@ export function thyuuShortcodeMusic(url: string): Musicatts | null {
       iframe = `<iframe src="${src}" loading="lazy" allowtransparency="true"></iframe>`;
       break;
     default:
-      return null;
+      return undefined;
   }
 
   return {
     type: type,
-    src: src,
-    iframe: `<thyuu-embed class="thyuu-music" data-type="${type}">${iframe}</thyuu-embed>`,
+    iframe: iframe
   };
 }

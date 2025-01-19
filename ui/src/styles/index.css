@@ -4,7 +4,9 @@
   --admin-theme-edge-tb: 4rem;
   --admin-theme-video-sb: 35px;
   --admin-theme-radius: 16px;
-  --admin-theme-bg: hsl(var(--admin-theme-font-color) / 4%)
+  --admin-theme-bg: hsl(var(--admin-theme-font-color) / 4%);
+  --admin-theme-card-mini: 5.5rem;
+  --admin-theme-font-size-small: .75rem;
 }
 
 .contact-thyuu-embed-container {
@@ -25,29 +27,6 @@
   --tw-ring-color: inherit
 }
 
-.contact-thyuu-embed-nav {
-  border-bottom: 1px #e7e7e7 solid;
-  display: flex;
-  padding: 5px 10px;
-  align-items: center
-}
-
-.contact-thyuu-embed-nav-start {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px
-}
-
-.contact-thyuu-embed-nav-end {
-  justify-content: flex-end
-}
-
-.contact-thyuu-embed-preview {
-  padding: 5px 10px
-}
-
 .thyuu-embed-setin {
   display: flex;
   flex-wrap: wrap;
@@ -58,8 +37,13 @@
   line-height: 1;
 }
 
+.thyuu-embed-setin details {
+  margin-bottom: 0px !important;
+}
+
 .thyuu-embed-edite-head {
   font-size: 1em;
+  padding: 0 0 .5em;
   background: 0;
   flex: 100%;
 }
@@ -71,20 +55,12 @@
   pointer-events: none;
 }
 
-.thyuu-embed-edite-head summary :is(i, h5),.contact-thyuu-embed-nav-start :is(i, h5) {
+.thyuu-embed-edite-head summary :is(i, h5){
   display: inline-flex !important;
   align-items: center;
   font-size: 13px;
   gap: .5em;
   margin: 0;
-}
-
-.contact-thyuu-embed-nav-start :is(i, h5) {
-  display: inline-flex !important;
-  align-items: center;
-  font-size: 13px;
-  gap: .5em;
-  margin: 0 !important;
 }
 
 .thyuu-embed-edite-head summary :is(i){
@@ -107,6 +83,7 @@
   background: hsl(var(--admin-theme-font-color) / 4%);
   border-radius: 1em;
   cursor: auto;
+  margin: revert;
 }
 
 .thyuu-embed-setin details ul i {
@@ -132,25 +109,42 @@
 
 thyuu-embed {
   display: block;
+  position: relative;
+  background: var(--admin-theme-bg);
+  border-radius: var(--admin-theme-radius);
+  outline: thin solid var(--admin-theme-bg);
 }
 
 thyuu-embed iframe {
+  width: 100%;
+  transition: .5s .5s;
+}
+
+.thyuu-noone {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  text-wrap: balance;
+  color: hsl(var(--admin-theme-font-color) / .5);
+  font-size: var(--admin-theme-font-size-small);
+  line-height: 2;
+  min-height: var(--admin-theme-card-mini);
+  gap: 1em 0;
+  padding: 1em;
+  background: var(--admin-theme-bg);
+  border-radius: var(--admin-theme-radius);
   width: 100%;
 }
 
 .thyuu-music {
   width: 100%;
   height: 65px;
-  outline: thin solid var(--admin-theme-bg);
-  border-radius: var(--admin-theme-radius);
   overflow: hidden;
 }
 .thyuu-music:is([data-type="nn_lists"], [data-type="nn_album"]) {
   height: 390px;
-}
-
-.thyuu-video[data-type="dy"] {
-  --admin-theme-video-sb: 35px;
 }
 
 .thyuu-video {
@@ -161,9 +155,7 @@ thyuu-embed iframe {
   width: 100%;
   max-height: calc(70vh - var(--admin-theme-edge-tb));
   padding-top: calc(var(--video-as, 56.25%) + var(--admin-theme-video-sb, 0%));
-  outline: thin solid var(--admin-theme-bg);
   background: #000;
-  border-radius: var(--admin-theme-radius);
   overflow: hidden;
 }
 
@@ -174,18 +166,18 @@ thyuu-embed iframe {
   z-index: 2;
 }
 .thyuu-video[data-type="dy"] {
-  --video-sb: 35px;
-}
-.thyuu-video[data-type="dy"].as-tb {
-  --video-as: 72%;
-  --video-sb: -48px;
-  width: min(324px, 100%);
-  max-height: none;
-  margin-inline: auto;
+  --admin-theme-video-sb: 35px;
 }
 
-.thyuu-video span {
-  color: hsl(var(--admin-theme-font-color) / .5);
-  font-size: .75rem;
+@media (max-width: 641px) {
+  .thyuu-video.as-tb:not([data-type="dy"]) {
+    aspect-ratio: 9 / 16;
+  }
+  .thyuu-video[data-type="dy"] {
+    width: min(324px, 100%);
+    max-height: none;
+    margin-inline: auto;
+    aspect-ratio: .4821;
+    overflow: hidden;
+  }
 }
-

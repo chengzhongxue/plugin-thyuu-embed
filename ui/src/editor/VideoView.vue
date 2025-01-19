@@ -2,14 +2,13 @@
 import type {NodeViewProps} from "@halo-dev/richtext-editor";
 import { NodeViewWrapper } from "@halo-dev/richtext-editor";
 import {computed, onMounted, ref, watch} from "vue";
-import {Toast} from "@halo-dev/components";
 import {thyuuShortcodeVideo, type Videoatts} from "@/utils/video";
 import IconVideo from "@/icon/IconVideo.vue";
 
 
 const props = defineProps<NodeViewProps>();
 
-const videoatts = ref<Videoatts | undefined>();
+const video = ref<Videoatts | undefined>();
 
 const src = computed({
   get: () => {
@@ -43,12 +42,7 @@ onMounted(() => {
 });
 
 function getVideo(url: string) {
-  const video = thyuuShortcodeVideo(url);
-  if (video) {
-    videoatts.value = video
-  } else {
-    Toast.error("嵌入视频，链接无法识别");
-  }
+  video.value = thyuuShortcodeVideo(url);
 }
 
 watch(
@@ -60,12 +54,6 @@ watch(
   }
 );
 
-const handleResetInit = () => {
-  props.updateAttributes({src: ""});
-  props.updateAttributes({size: ""});
-  videoatts.value = undefined; 
-};
-
 </script>
 
 <template>
@@ -73,7 +61,7 @@ const handleResetInit = () => {
                      :class="{
         'contact-thyuu-embed-container--selected': selected,
       }">
-    <div class="thyuu-embed-setin"  v-if="!src || videoatts==undefined">
+    <div class="thyuu-embed-setin">
       <details class="thyuu-embed-edite-head">
         <summary>
           <h5><i><IconVideo/></i>THYUU / 嵌入视频</h5>
@@ -104,25 +92,11 @@ const handleResetInit = () => {
         tabindex="-1"
         @focus="handleSetFocus"
       />
-    </div>
-    <div v-else class="group relative">
-      <div class="contact-thyuu-embed-nav">
-        <div class="contact-thyuu-embed-nav-start">
-          <h5><i><IconVideo/></i>THYUU / 嵌入视频</h5>
-        </div>
-        <div class="contact-thyuu-embed-nav-end">
-          <button @click="handleResetInit"
-                  class="btn-sm btn-default btn" type="button">
-            <span class="btn-content">更换</span>
-          </button>
-        </div>
-      </div>
-      <div class="contact-thyuu-embed-preview" >
-        <thyuu-embed :class="`thyuu-video as-${size == null ? '' : size}`" :data-type="videoatts.type">
-          <iframe :src="videoatts.src" loading="lazy" scrolling="no" referrerpolicy="unsafe-url" allow="autoplay; encrypted-media"
-                  allowtransparency="true" allowfullscreen="true"></iframe>
-        </thyuu-embed>
-      </div>
+      <thyuu-embed v-if="video != undefined" :class="`thyuu-video as-${size == null ? '' : size}`" :data-type="video.type">
+        <iframe :src="video.src" loading="lazy" scrolling="no" referrerpolicy="unsafe-url" allow="autoplay; encrypted-media"
+                allowtransparency="true" allowfullscreen="true"></iframe>
+      </thyuu-embed>
+      <thyuu-embed v-else-if="src" class="thyuu-noone icon-film">链接无法识别<br>{{src}}</thyuu-embed>
     </div>
   </node-view-wrapper>
 </template>
