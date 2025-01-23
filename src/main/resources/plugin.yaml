@@ -8,7 +8,7 @@ spec:
   author:
     name: 困困鱼 & THYUU
     website: https://kunkunyu.com
-  logo: logo.png
+  logo: logo.svg
   homepage: https://github.com/chengzhongxue/plugin-thyuu-embed#readme
   repo: https://github.com/chengzhongxue/plugin-thyuu-embed
   issues: https://github.com/chengzhongxue/plugin-thyuu-embed/issues
