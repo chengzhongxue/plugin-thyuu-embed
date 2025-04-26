@@ -250,20 +250,20 @@ thyuu-embed iframe {
   scale: 1.05;
 }
 
-.tiptap details {
+.block-details {
   display: flex;
   gap: 0.25rem;
-  margin: 1.5rem 0px;
   border: 1px solid rgba(61, 37, 20, .12);
   border-radius: 0.5rem;
   padding: 0.5rem;
 }
 
-button:not([disabled]) {
-  cursor: pointer;
-}
-
-.tiptap details summary {
+.block-details summary {
   font-weight: 700;
   margin: 0.5em 0;
+}
+
+.markdown-body details {
+  margin-top: .75em !important;;
+  margin-bottom: 0 !important;;
 }
