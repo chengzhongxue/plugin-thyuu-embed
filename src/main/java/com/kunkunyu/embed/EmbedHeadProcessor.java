@@ -1,6 +1,8 @@
 package com.kunkunyu.embed;
 
+import com.google.common.base.Throwables;
 import com.kunkunyu.embed.service.SettingConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.PropertyPlaceholderHelper;
 import org.thymeleaf.context.ITemplateContext;
@@ -13,6 +15,7 @@ import run.halo.app.theme.dialect.TemplateHeadProcessor;
 import java.util.Properties;
 
 @Component
+@Slf4j
 public class EmbedHeadProcessor implements TemplateHeadProcessor {
 
     private final PropertyPlaceholderHelper
@@ -21,19 +24,22 @@ public class EmbedHeadProcessor implements TemplateHeadProcessor {
     private final SettingConfig settingConfig;
 
     public Mono<Void> process(ITemplateContext context, IModel model, IElementModelStructureHandler structureHandler) {
-        return Mono.just(this.html()).doOnNext((html) -> {
-            IModelFactory modelFactory = context.getModelFactory();
-            model.add(modelFactory.createText(html));
-        }).then();
+
+        return settingConfig.getBasicConfig()
+            .doOnNext(basicConfig -> {
+                final IModelFactory modelFactory = context.getModelFactory();
+                model.add(modelFactory.createText(html(basicConfig.isStaticEnable())));
+            })
+            .onErrorResume(e -> {
+                log.error("EmbedHeadProcessor process failed", Throwables.getRootCause(e));
+                return Mono.empty();
+            })
+            .then();
     }
 
-    private String html() {
-        var basicConfig = settingConfig.getBasicConfig().blockOptional().orElseThrow();
-
+    private String html(boolean staticEnable) {
         String html = "<script src=\"${pluginStaticPath}/thyuu-embed.iife.js?version=${version}\"></script>\n";
 
-        boolean staticEnable = basicConfig.isStaticEnable();
-        System.out.println(staticEnable);
         if (staticEnable) {
             html += """
                 <script>
