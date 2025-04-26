@@ -2,6 +2,8 @@ apiVersion: plugin.halo.run/v1alpha1
 kind: Plugin
 metadata:
   name: plugin-thyuu-embed
+  annotations:
+    "store.halo.run/app-id": "app-lKYuv"
 spec:
   enabled: true
   requires: ">=2.20.0"
@@ -9,10 +11,12 @@ spec:
     name: 困困鱼 & THYUU
     website: https://kunkunyu.com
   logo: logo.svg
-  homepage: https://github.com/chengzhongxue/plugin-thyuu-embed#readme
+  homepage: https://www.halo.run/store/apps/app-lKYuv
   repo: https://github.com/chengzhongxue/plugin-thyuu-embed
   issues: https://github.com/chengzhongxue/plugin-thyuu-embed/issues
   displayName: "THYUU 区块"
+  configMapName: plugin-thyuu-embed-configmap
+  settingName: plugin-thyuu-embed-settings
   license:
     - name: "GPL-3.0"
       url: "https://github.com/chengzhongxue/plugin-thyuu-embed/blob/main/LICENSE"

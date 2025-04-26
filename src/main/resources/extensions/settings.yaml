@@ -1,0 +1,14 @@
+apiVersion: v1alpha1
+kind: Setting
+metadata:
+  name: plugin-thyuu-embed-settings
+spec:
+  forms:
+    - group: basic
+      label: 基本设置
+      formSchema:
+        - $formkit: checkbox
+          label: 启用静态资源
+          name: staticEnable
+          help: 默认不启用。
+          value: false

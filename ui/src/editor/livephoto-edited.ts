@@ -10,23 +10,21 @@ import {
 } from "@halo-dev/richtext-editor";
 import { markRaw } from "vue";
 import { ToolboxItem } from "@halo-dev/richtext-editor";
-import MdiShare from "~icons/mdi/share";
-import BlockActionSeparator from "../components/BlockActionSeparator.vue";
 import MdiDeleteForeverOutline from "~icons/mdi/delete-forever-outline?color=red";
 import { deleteNode } from "../utils/delete-node";
-import IconMusic from "@/icon/IconMusic.vue";
-import MusicView from "@/editor/MusicView.vue";
+import IconLivephoto from "@/icon/IconLivephoto.vue";
+import LivephotoView from "@/editor/LivephotoView.vue";
 
 declare module "@halo-dev/richtext-editor" {
   interface Commands<ReturnType> {
-    "thyuu-music": {
-      setMusic: (options: { src: string }) => ReturnType;
+    "thyuu-livephoto": {
+      setLivephoto: (options: { photoURL: string,videoURL: string }) => ReturnType;
     };
   }
 }
 
-const MusicExtension = Node.create({
-  name: "thyuu-music",
+const LivephotoExtension = Node.create({
+  name: "thyuu-livephoto",
   fakeSelection: true,
 
   group() {
@@ -36,13 +34,31 @@ const MusicExtension = Node.create({
   addAttributes() {
     return {
       ...this.parent?.(),
-      src: {
+      photoURL: {
         default: null,
         parseHTML: (element) => {
-          return element.getAttribute("src");
+          return element.getAttribute("photo-url");
         },
         renderHTML(element) {
-          return { src: element.src };
+          return { "photo-url": element.photoURL };
+        },
+      },
+      videoURL: {
+        default: null,
+        parseHTML: (element) => {
+          return element.getAttribute("video-url");
+        },
+        renderHTML(element) {
+          return { "video-url": element.videoURL };
+        },
+      },
+      photoARN: {
+        default: 1.0,
+        parseHTML: (element) => {
+          return element.getAttribute("photo-arn");
+        },
+        renderHTML(element) {
+          return { "photo-arn": element.photoARN };
         },
       },
     };
@@ -51,18 +67,18 @@ const MusicExtension = Node.create({
   parseHTML() {
     return [
       {
-        tag: "thyuu-music",
+        tag: "thyuu-livephoto",
       },
     ];
   },
 
   renderHTML({ node,HTMLAttributes }) {
-    return ["thyuu-music", mergeAttributes(HTMLAttributes)];
+    return ["thyuu-livephoto", mergeAttributes(HTMLAttributes)];
     
   },
   addCommands() {
     return {
-      setMusic:
+      setLivephoto:
         (options) =>
           ({ commands }) => {
             return commands.insertContent([
@@ -82,7 +98,7 @@ const MusicExtension = Node.create({
   addInputRules() {
     return [
       nodeInputRule({
-        find: /^\$thyuu-music\$$/,
+        find: /^\$thyuu-livephoto\$$/,
         type: this.type,
         getAttributes: (e) => ({ 
           src: e[1] 
@@ -92,7 +108,7 @@ const MusicExtension = Node.create({
   },
 
   addNodeView() {
-    return VueNodeViewRenderer(MusicView);
+    return VueNodeViewRenderer(LivephotoView);
   },
 
   addOptions() {
@@ -100,15 +116,15 @@ const MusicExtension = Node.create({
       getCommandMenuItems() {
         return {
           priority: 2e2,
-          icon: markRaw(IconMusic),
-          title: "THYUU / 嵌入音乐",
-          keywords: ["thyuu-music", "thyuu", "嵌入音乐"],
+          icon: markRaw(IconLivephoto),
+          title: "THYUU / 实况图片",
+          keywords: ["thyuu-livephoto", "thyuu", "实况图片"],
           command: ({ editor, range }: { editor: Editor; range: Range }) => {
             editor
               .chain()
               .focus()
               .deleteRange(range)
-              .setMusic({ src: "" })
+              .setLivephoto({ photoURL: "", videoURL: "" })
               .run();
           },
         };
@@ -119,13 +135,13 @@ const MusicExtension = Node.create({
           component: markRaw(ToolboxItem),
           props: {
             editor,
-            icon: markRaw(IconMusic),
-            title: "THYUU / 嵌入音乐",
+            icon: markRaw(IconLivephoto),
+            title: "THYUU / 实况图片",
             action: () => {
               editor
                 .chain()
                 .focus()
-                .setMusic({ src: "" })
+                .setLivephoto({ photoURL: "", videoURL: "" })
                 .run();
             },
           },
@@ -133,32 +149,18 @@ const MusicExtension = Node.create({
       },
       getBubbleMenu({ editor }: { editor: Editor }) {
         return {
-          pluginKey: "thyuu-music-bubble-menu",
+          pluginKey: "thyuu-livephoto-bubble-menu",
           shouldShow: ({ state }: { state: EditorState }) => {
-            return isActive(state, MusicExtension.name);
+            return isActive(state, LivephotoExtension.name);
           },
           items: [
-            {
-              priority: 30,
-              props: {
-                icon: markRaw(MdiShare),
-                title: "打开链接",
-                action: () => {
-                  window.open(editor.getAttributes(MusicExtension.name).src, "_blank");
-                },
-              },
-            },
-            {
-              priority: 40,
-              component: markRaw(BlockActionSeparator),
-            },
             {
               priority: 50,
               props: {
                 icon: markRaw(MdiDeleteForeverOutline),
                 title: "删除",
                 action: ({ editor }: { editor: Editor }) => {
-                  deleteNode(MusicExtension.name, editor);
+                  deleteNode(LivephotoExtension.name, editor);
                 },
               },
             },
@@ -170,4 +172,4 @@ const MusicExtension = Node.create({
 
 
 })
-export default MusicExtension;
+export default LivephotoExtension;

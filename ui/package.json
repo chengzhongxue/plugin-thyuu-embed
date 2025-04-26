@@ -16,7 +16,8 @@
     "floating-vue": "^5.2.2",
     "axios": "^1.7.2",
     "canvas-confetti": "^1.9.3",
-    "vue": "^3.4.31"
+    "vue": "^3.4.31",
+    "@kunkunyu/thyuu-embed": "workspace:*"
   },
   "devDependencies": {
     "@halo-dev/ui-plugin-bundler-kit": "^2.20.0",

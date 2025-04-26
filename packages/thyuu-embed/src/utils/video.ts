@@ -1,16 +1,10 @@
-export interface Videoatts {
-  type: string;
-  src: string;
-}
+type VideoType = 'bb' | 'bb_live' | 'dy' | 'qq' | 'qq_page' | 'yk';
 
-type VideoType = 'bb' | 'bb_live' | 'dy' | 'xg' | 'qq' | 'qq_page' | 'yk';
-
-export function thyuuShortcodeVideo(url: string): Videoatts | undefined {
+export function thyuuShortcodeVideo(url: string | null, size: string  | null): string {
   const patterns: { [key in VideoType]: RegExp } = {
     bb: /https?:\/\/www\.bilibili\.com\/video\/(BV\w+)/,
     bb_live: /https?:\/\/live\.bilibili\.com\/(\d+)/,
     dy: /https?:\/\/www\.douyin\.com\/video\/(\d+)/,
-    xg: /https?:\/\/www\.ixigua\.com\/(\d+)/,
     qq: /https?:\/\/v\.qq\.com\/x\/cover\/[^\/]+\/(\w+)\.html/,
     qq_page: /https?:\/\/v\.qq\.com\/x\/page\/([a-zA-Z0-9]+)\.html/,
     yk: /https?:\/\/v\.youku\.com\/v_show\/id_(\w+)(?:==)?\.html/,
@@ -20,7 +14,7 @@ export function thyuuShortcodeVideo(url: string): Videoatts | undefined {
   let type: VideoType | undefined;
 
   for (const [key, pattern] of Object.entries(patterns)) {
-    const matches = url.match(pattern);
+    const matches = url?.match(pattern);
     if (matches) {
       id = matches[1];
       type = key as VideoType;
@@ -28,7 +22,13 @@ export function thyuuShortcodeVideo(url: string): Videoatts | undefined {
     }
   }
 
-  if (!url || !id) return undefined;
+  if (!url) {
+      return `<thyuu-embed class="thyuu-noone icon-film">链接不存在<br></thyuu-embed>`
+  }
+
+  if (!id) {
+      return `<thyuu-embed class="thyuu-noone icon-film">链接无法识别<br>${url}</thyuu-embed>`
+  }
 
   let src: string = '';
 
@@ -39,12 +39,8 @@ export function thyuuShortcodeVideo(url: string): Videoatts | undefined {
     case 'qq':
     case 'qq_page': src = `https://v.qq.com/txp/iframe/player.html?vid=${id}`; break;
     case 'yk': src = `https://player.youku.com/embed/${id}`; break;
-    case 'xg': src = `https://www.ixigua.com/iframe/${id}`; break;
-    default: return undefined;
+    default: return '<div class="thyuu-no-video">不支持的视频平台</div>';
   }
 
-  return {
-    type: type,
-    src: src
-  };
+  return `<thyuu-embed class="thyuu-video as-${size != null ? size : '' }" data-type="${type}"><iframe src="${src}" loading="lazy" scrolling="no" referrerpolicy="unsafe-url" allow="autoplay; encrypted-media" allowtransparency="true" allowfullscreen="true"></iframe><i class="loading">加载中</i></thyuu-embed>`;
 }

@@ -27,84 +27,101 @@
   --tw-ring-color: inherit
 }
 
-.thyuu-embed-setin {
+
+.thyuu-embed-block {
   display: flex;
-  flex-wrap: wrap;
+  flex-flow: column;
   font-size: 12px;
   gap: 1em;
-  padding: 2em;
-  align-items: center;
+  padding: 1.5em;
+  background-color: #fff;
+  color: #1e1e1e;
+  border-radius: var(--admin-theme-radius);
+  outline: thin solid var(--admin-theme-bg);
   line-height: 1;
 }
 
-.thyuu-embed-setin details {
+.thyuu-embed-block details {
   margin-bottom: 0px !important;
 }
 
-.thyuu-embed-edite-head {
-  font-size: 1em;
-  padding: 0 0 .5em;
-  background: 0;
-  flex: 100%;
-}
 
-.thyuu-embed-edite-head summary {
+.thyuu-embed-refer {
+  font-size: 1em;
+  padding: 0;
+  background: 0;
+  border-radius: 0;
+}
+.thyuu-embed-refer summary {
   display: flex !important;
   align-items: center;
   justify-content: space-between;
   pointer-events: none;
+  padding: 0 0 1em;
+  border-bottom: thin solid var(--admin-theme-bg);
 }
-
-.thyuu-embed-edite-head summary :is(i, h5){
+.thyuu-embed-refer summary::-webkit-details-marker {
+  display:none;
+}
+.thyuu-embed-refer summary :is(i, h5) {
   display: inline-flex !important;
   align-items: center;
   font-size: 13px;
   gap: .5em;
   margin: 0;
 }
-
-.thyuu-embed-edite-head summary :is(i){
+.thyuu-embed-refer summary :is(i) {
   cursor: pointer;
   pointer-events: auto;
-  font-size: 1em;
+  font-size: 1.1em;
   line-height: 1;
-  color: #1E1E1E;
 }
 
-.thyuu-embed-setin details h6 {
-  margin: 2em 0 1em;
+.thyuu-embed-block details h6 {
+  margin: 1em 0;
   font-size: 1em;
   color: #1E1E1E;
 }
 
-.thyuu-embed-setin details ul {
+.thyuu-embed-block details p {
+  line-height: 1.675;
+}
+
+.thyuu-embed-block details ul {
   padding: .5em 2em;
   color: hsl(0deg 0% 0% / 50%);
-  background: hsl(var(--admin-theme-font-color) / 4%);
+  background: var(--admin-theme-bg);
   border-radius: 1em;
   cursor: auto;
-  margin: revert;
 }
 
-.thyuu-embed-setin details ul i {
-  color: var(--wp-components-color-accent, var(--admin-theme-color, #3858e9));
-}
-
-.thyuu-embed-setin details ul li {
+.thyuu-embed-block details ul li {
   line-height: 1.675;
   font-size: 12px;
 }
 
-.thyuu-embed-setin input[type="url"] {
+.thyuu-embed-block details ul i {
+  color: var(--admin-theme-color, #3858e9);
+}
+
+.thyuu-embed-block :is(input[type="url"], select) {
+  color: #1e1e1e;
+  border: 0;
+  border-radius: 1.5em;
+  background-color: var(--admin-theme-bg);
+  width: auto;
+  flex: 0;
+  font-size: inherit;
+  min-height: 40px;
+}
+.thyuu-embed-block input[type="url"] {
   flex: auto;
   min-width: 30ch;
 }
 
-.thyuu-embed-setin :is(input[type="url"], select) {
-  color: var(--wp-components-color-foreground, #1e1e1e);
-  border-color: var(--wp-components-color-gray-600, #949494);
-  font-size: inherit;
-  min-height: 40px;
+.thyuu-embed-block input[type=url] {
+  padding: 0 8px;
+  line-height: 2;
 }
 
 thyuu-embed {
@@ -180,4 +197,55 @@ thyuu-embed iframe {
     aspect-ratio: .4821;
     overflow: hidden;
   }
+}
+
+.thyuu-embed-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+.thyuu-embed-block .thyuu-upbtn {
+  display: flex;
+  flex-direction: column;
+  font: inherit;
+  flex: 1;
+  aspect-ratio: 1;
+  height: auto;
+  min-height: 6em;
+  min-width: 6em;
+  outline: thin solid var(--admin-theme-bg);
+  color: hsl(var(--admin-theme-font-color) / .7);
+  background: var(--admin-theme-bg);
+  border-radius: 1em;
+  overflow: hidden;
+  padding: 0;
+  gap: 1em;
+  justify-content: center;
+  align-items: center;
+}
+
+.thyuu-embed-block .thyuu-upbtn :is(i){
+  padding: 1em;
+  background: var(--admin-theme-bg);
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.thyuu-embed-block .thyuu-upbtn.has-obj  :is(i) {
+  position: absolute;
+  color: white;
+  outline: thin solid rgb(255 255 255 / 10%);
+  backdrop-filter: blur(1em) saturate(2);
+}
+
+.thyuu-embed-block .media-obj {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+  transition: .3s;
+}
+.thyuu-embed-block .thyuu-upbtn:hover .media-obj {
+  filter: brightness(.5);
+  scale: 1.05;
 }
