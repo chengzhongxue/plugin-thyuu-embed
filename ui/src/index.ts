@@ -1,5 +1,5 @@
 import { definePlugin } from "@halo-dev/console-shared";
-import {LivephotoExtension, MusicExtension, VideoExtension} from "@/editor";
+import {DetailsExtension, LivephotoExtension, MusicExtension, VideoExtension} from "@/editor";
 import '@/styles/index.css';
 
 export default definePlugin({
@@ -7,7 +7,7 @@ export default definePlugin({
   routes: [],
   extensionPoints: {
     "default:editor:extension:create": () => {
-      return [VideoExtension,MusicExtension,LivephotoExtension];
+      return [VideoExtension,MusicExtension,LivephotoExtension,DetailsExtension];
     },
   },
 });
