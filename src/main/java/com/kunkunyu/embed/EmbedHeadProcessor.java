@@ -44,8 +44,7 @@ public class EmbedHeadProcessor implements TemplateHeadProcessor {
             html += """
                 <script>
                   function addLoadedClassToParents(parentSelector, childSelector, loadedClass) {
-                      document.addEventListener('DOMContentLoaded', function () {
-                        var parentElements = document.querySelectorAll(parentSelector);
+                       var parentElements = document.querySelectorAll(parentSelector);
                         parentElements.forEach(function (parentElement) {
                           var childElement = parentElement.querySelector(childSelector);
                           if (!childElement) {
@@ -57,9 +56,18 @@ public class EmbedHeadProcessor implements TemplateHeadProcessor {
                             });
                           }
                         });
-                      });
                   }
-                  addLoadedClassToParents('thyuu-embed', 'iframe', 'loaded');
+
+                  document.addEventListener("DOMContentLoaded", () => {
+                      addLoadedClassToParents('thyuu-embed', 'iframe', 'loaded');
+                  }, {
+                      once: true
+                  });
+            
+                  document.addEventListener("pjax:success", () => {
+                      addLoadedClassToParents('thyuu-embed', 'iframe', 'loaded');
+                  });
+             
                 </script>
                 <link rel="stylesheet" href="${pluginStaticPath}/thyuu-embed.css?version=${version}" />
             </div>
