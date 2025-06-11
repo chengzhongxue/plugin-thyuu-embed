@@ -1,138 +1,156 @@
 :root {
-    --thyuu-font-color: 0deg 0% 15%;
-    --thyuu-nav-height: 4rem;
-    --thyuu-edge-tb: var(--thyuu-nav-height);
-    --thyuu-bg: hsl(var(--thyuu-font-color) / 4%);
-    --thyuu-radius: 16px;
-    --thyuu-font-size-small: .75rem;
-    --thyuu-card-size: 22.5rem;
-    --thyuu-card-mini: 13.5rem;
+    --thyuu--size-small: .75rem;
+    --thyuu--color-font: 0deg 0% 20%;
+    --thyuu--alpha-font: 100%;
+    --thyuu--color-font-head: hsl(var(--thyuu--color-font) / var(--thyuu--alpha-font));
+    --thyuu--color-back-font: hsl(var(--thyuu--color-font) / 5%);
+    --thyuu--size-normal: 16px;
+    --thyuu--size-radius: var(--thyuu--size-normal);
+    --thyuu--size-edgetb: var(--thyuu--height-head);
+    --thyuu--height-head: 4rem;
+    --thyuu--size-card-normal: 22.5rem;
+    --thyuu--size-card-small: 13.5rem;
+
+
+}
+
+/* 夜间模式 */
+:root[theme=dark] {
+    --thyuu--color-font:214deg 5% 80%;
+    --thyuu--color-back-have:hsl(214deg 5% 5%);
+    --thyuu--color-back-white:hsl(214deg 5% 10%);
+    --thyuu--color-back-shift:hsl(214deg 5% 20% / 50%);
+    --thyuu--color-font-fill:var(--thyuu--color-back-have);
 }
 
 
-thyuu-embed {
-    display: block;
-    position: relative;
-    background: var(--thyuu-bg);
-    border-radius: var(--thyuu-radius);
-    outline: thin solid var(--thyuu-bg);
-}
-
-thyuu-embed iframe {
-    width: 100%;
-    transition: .5s .5s;
-}
-
-thyuu-embed:not(.loaded) iframe {
-    opacity: 0;
-    pointer-events: none;
-}
-
-thyuu-embed:not(.loaded) .loading {
+thyuu-loaed {
+    --trfm: scale(1.1);
     position: absolute;
     display: flex;
-    justify-content: center;
     align-items: center;
-    font-size: var(--thyuu-font-size-small);
+    justify-content: center;
+    font-size: var(--thyuu--size-small);
+    inset: 0;
     width: fit-content;
-    height: fit-content;
+    height: 3em;
     line-height: 1;
-    inset: 1em 0 auto;
+    padding: 1em;
     margin: auto;
     gap: .5em;
-    padding: 1em 2em;
+    color: var(--thyuu--color-font-head);
+    border: thin solid var(--thyuu--color-back-shift, hsl(0deg 0% 100% / 10%));
     border-radius: 2em;
+    background: var(--thyuu--color-back-shift, var(--thyuu--color-font-fill, hsl(0deg 0% 100% / 100%)));
+    animation: opacity .5s .5s backwards, transform 1s .5s backwards;
+    transform-origin: bottom;
     pointer-events: none;
-    opacity: .5;
+    z-index: 2;
+    transition: .5s;
 }
-
-thyuu-embed:not(.loaded) .loading:before {
+thyuu-loaed.loaded {
+    opacity: 0;
+    visibility: hidden;
+    transform: var(--loaed-trfm, scale(.98));
+}
+thyuu-loaed::before {
     content: "";
     border-top: 2px solid;
     border-radius: 50%;
     width: 1em;
     aspect-ratio: 1;
-    animation: rotate 2s linear infinite;
+    animation: rotate 2s linear infinite var(--loaed-play, paused);
 }
-
-thyuu-embed.loaded .loading {
-    display: none;
+thyuu-embed {
+    display: block;
+    position: relative;
+    background: var(--thyuu--color-back-font);
+    border-radius: var(--thyuu--size-radius);
+    outline: thin solid var(--thyuu--color-back-font);
 }
-
+thyuu-embed iframe {
+    width: 100%;
+    transition: .5s .5s;
+}
+thyuu-embed thyuu-loaed {
+    inset-block: 1.25em auto;
+}
+thyuu-embed:not(.loaded) iframe {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+thyuu-embed:not(.loaded) thyuu-loaed {
+    --loaed-play: running;
+}
 .thyuu-block {
     padding: 1em;
-    border-radius: var(--thyuu-radius);
-    background: var(--thyuu-bg);
+    border-radius: var(--thyuu--size-radius);
+    background: var(--thyuu--color-back-font);
 }
-
 .thyuu-music {
     width: 100%;
     height: 65px;
     overflow: hidden;
 }
-
 .thyuu-music:is([data-type="nn_lists"], [data-type="nn_album"]) {
     height: 390px;
 }
-
 :is([theme="dark"], body.dark-color) .thyuu-music iframe {
     opacity: .6;
     mix-blend-mode: plus-lighter;
 }
-
 .thyuu-video {
-    --thyuu-font-color: 0 0% 100%;
+    --thyuu--color-font: 0 0% 100%;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     max-width: 100%;
-    max-height: calc(80vh - var(--thyuu-edge-tb));
+    max-height: calc(80vh - var(--thyuu--size-edgetb));
     margin-inline: auto;
     aspect-ratio: 16 / 9;
     background: #000;
     color: #fff;
 }
-
 .thyuu-video iframe {
     height: 100%;
     border-radius: inherit;
     align-self: flex-start;
     z-index: 2;
 }
-
 .thyuu-video[data-type="dy"] iframe:hover {
     height: calc(100% + 35px);
 }
-
 .thyuu-livephoto {
     background: 0;
     outline: 0;
 }
-
 .thyuu-livephoto .lpk-live-photo-player {
-    position: relative;
+    position:relative;
     max-width: 100%;
-    max-height: calc(100vh - var(--thyuu-edge-tb)*2);
-    border-radius: var(--thyuu-radius);
+    max-height: calc(100vh - var(--thyuu--size-edgetb)*2);
+    border-radius: var(--thyuu--size-radius);
     overflow: hidden;
 }
 
 .thyuu-noone {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     text-wrap: balance;
-    color: hsl(var(--thyuu-font-color) / .5);
-    font-size: var(--thyuu-font-size-small);
+    color: hsl(var(--thyuu--color-font) / .5);
+    font-size: var(--thyuu--size-small);
     line-height: 2;
     max-width: 100%;
-    min-width: min(var(--thyuu-card-size), 100%);
-    min-height: 6.5rem;
+    min-width: min(var(--thyuu--size-card-normal),100%);
+    min-height: var(--thyuu--size-card-small);
+    gap: 1em 0;
     padding: 1em;
-    background: var(--thyuu-bg);
-    border-radius: var(--thyuu-radius);
+    background: var(--thyuu--color-back-font);
+    border-radius: var(--thyuu--size-radius);
 }
 
 :where(thyuu-embed) {
@@ -153,12 +171,7 @@ thyuu-embed.loaded .loading {
     }
 }
 
-@keyframes rotate {
-    from {
-        transform: rotate(0deg)
-    }
-
-    to {
-        transform: rotate(1turn)
-    }
+@keyframes rotate{
+    from{transform: rotate(0deg)}
+    to{transform: rotate(1turn)}
 }

@@ -4,13 +4,10 @@ const DetailsContent = Node.create({
   name: "detailsContent",
   content: "block+",
   isolating: true,
-  fakeSelection: true,
 
   addOptions() {
     return {
-      HTMLAttributes: {
-        'data-type': 'detailsContent',
-      },
+      HTMLAttributes: {},
     };
   },
 

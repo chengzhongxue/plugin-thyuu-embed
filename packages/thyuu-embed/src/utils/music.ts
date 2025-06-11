@@ -79,6 +79,5 @@ export function thyuuShortcodeMusic(url: string  | null): string {
 
   return `<thyuu-embed class="thyuu-music" data-type="${type}">
             ${iframe}
-            <i class="loading">加载中</i>
         </thyuu-embed>`
 }

@@ -43,29 +43,70 @@ public class EmbedHeadProcessor implements TemplateHeadProcessor {
         if (staticEnable) {
             html += """
                 <script>
-                  function addLoadedClassToParents(parentSelector, childSelector, loadedClass) {
-                       var parentElements = document.querySelectorAll(parentSelector);
-                        parentElements.forEach(function (parentElement) {
-                          var childElement = parentElement.querySelector(childSelector);
-                          if (!childElement) {
-                            return;
-                          }
-                          if (childElement) {
-                            childElement.addEventListener('load', function () {
-                              parentElement.classList.add(loadedClass);
+                  // 加载提示
+                  function THYUUloader(parent, loadingText = '加载中', errorText = '加载失败，点击重试') {
+                    const loader = document.createElement('thyuu-loaed');
+                    loader.textContent = loadingText;
+                    parent.appendChild(loader);
+                    return {
+                        complete: () => {
+                            loader.classList.add('loaded');
+                            setTimeout(() => {
+                                loader.remove();
+                            }, 1000);
+                        },
+                        error: (retryCallback) => {
+                            loader.textContent = errorText;
+                            loader.classList.add('error');
+                            loader.style.cursor = 'pointer';
+                            loader.addEventListener('click', () => {
+                                loader.textContent = loadingText;
+                                loader.classList.remove('error');
+                                if (typeof retryCallback === 'function') {
+                                    retryCallback();
+                                }
+                            }, { once: true });
+                        }
+                    };
+                  }
+                  // 嵌入懒加载动画
+                  function THYUUEmbedLoad(parentSelector, childSelector, loadedClass) {
+                    document.querySelectorAll(parentSelector).forEach(parent => {
+                        const child = parent.querySelector(childSelector);
+                        if (!child) return;
+                        const loader = THYUUloader(parent, '媒体加载中', '媒体加载失败，点击重试');
+                        const loadHandler = () => {
+                            parent.classList.add(loadedClass);
+                            loader.complete();
+                            child.removeEventListener('load', loadHandler);
+                            child.removeEventListener('error', errorHandler);
+                        };
+                        const errorHandler = () => {
+                            loader.error(() => {
+                                child.addEventListener('load', loadHandler);
+                                child.addEventListener('error', errorHandler);
+                                if (child.tagName === 'IMG' || child.tagName === 'IFRAME') {
+                                    child.src += '';
+                                }
                             });
-                          }
-                        });
+                        };
+                        if (child.complete && child.tagName === 'IMG') {
+                            loadHandler();
+                            return;
+                        }
+                        child.addEventListener('load', loadHandler);
+                        child.addEventListener('error', errorHandler);
+                    });
                   }
 
                   document.addEventListener("DOMContentLoaded", () => {
-                      addLoadedClassToParents('thyuu-embed', 'iframe', 'loaded');
+                      THYUUEmbedLoad('thyuu-embed', 'iframe', 'loaded');
                   }, {
                       once: true
                   });
             
                   document.addEventListener("pjax:success", () => {
-                      addLoadedClassToParents('thyuu-embed', 'iframe', 'loaded');
+                      THYUUEmbedLoad('thyuu-embed', 'iframe', 'loaded');
                   });
              
                 </script>

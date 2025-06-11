@@ -42,5 +42,5 @@ export function thyuuShortcodeVideo(url: string | null, size: string  | null): s
     default: return '<div class="thyuu-no-video">不支持的视频平台</div>';
   }
 
-  return `<thyuu-embed class="thyuu-video as-${size != null ? size : '' }" data-type="${type}"><iframe src="${src}" loading="lazy" scrolling="no" referrerpolicy="unsafe-url" allow="autoplay; encrypted-media" allowtransparency="true" allowfullscreen="true"></iframe><i class="loading">加载中</i></thyuu-embed>`;
+  return `<thyuu-embed class="thyuu-video as-${size != null ? size : '' }" data-type="${type}"><iframe src="${src}" loading="lazy" scrolling="no" referrerpolicy="unsafe-url" allow="autoplay; encrypted-media" allowtransparency="true" allowfullscreen="true"></iframe></thyuu-embed>`;
 }

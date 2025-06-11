@@ -14,6 +14,8 @@ import { deleteNode } from "../utils/delete-node";
 import DetailsContent from './details-content';
 import DetailsSummary from './details-summary';
 import PajamasDetailsBlock from '~icons/pajamas/details-block?width=128px&height=128px';
+import TablerLayoutBottombarCollapse from '~icons/tabler/layout-bottombar-collapse'
+import TablerLayoutBottombarCollapseFilled from '~icons/tabler/layout-bottombar-collapse-filled'
 
 declare module "@halo-dev/richtext-editor" {
   interface Commands<ReturnType> {
@@ -87,6 +89,29 @@ const DetailsExtension = Node.create({
           },
           items: [
             {
+              priority: 45,
+              props: {
+                title:
+                  editor.getAttributes(DetailsExtension.name).open === true
+                    ? "收起"
+                    : "展开",
+                isActive: () => {
+                  return editor.getAttributes(DetailsExtension.name).open  === true;
+                },
+                icon: markRaw(
+                  editor.getAttributes(DetailsExtension.name).open === true
+                    ? TablerLayoutBottombarCollapse
+                    : TablerLayoutBottombarCollapseFilled
+                ),
+                action: () => {
+                  const open = editor.getAttributes(DetailsExtension.name).open;
+                  editor.commands.updateAttributes(DetailsExtension.name, {
+                    open: open === false ? true : false
+                  });
+                },
+              },
+            },
+            {
               priority: 50,
               props: {
                 icon: markRaw(MdiDeleteForeverOutline),
@@ -111,7 +136,7 @@ const DetailsExtension = Node.create({
         default: true,
         parseHTML: element => element.hasAttribute('open'),
         renderHTML: attributes => ({
-          open: attributes.open
+          open: attributes.open ? true : undefined
         })
       }
     };
@@ -133,7 +158,7 @@ const DetailsExtension = Node.create({
       "details",
       mergeAttributes({
         class: 'block-details',
-        open: node.attrs.open
+        open: node.attrs.open ? true : undefined
       }, HTMLAttributes),
       0
     ];
