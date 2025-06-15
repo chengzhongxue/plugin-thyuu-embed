@@ -23,17 +23,17 @@ const isActiveType = (item: VideoViewType) => {
 };
 </script>
 <template>
-  <ul class="flex flex-col space-y-1.5">
+  <ul class=":uno: flex flex-col space-y-1.5">
     <li
       v-for="item in videoViewTypes"
       :key="item.key"
-      class="group flex cursor-pointer flex-row items-center gap-3 rounded px-1.5 py-1 hover:bg-gray-100"
-      :class="{ '!bg-gray-100': isActiveType(item) }"
+      class=":uno: group flex cursor-pointer flex-row items-center gap-3 rounded px-1.5 py-1 hover:bg-gray-100"
+      :class="{ ':uno: !bg-gray-100': isActiveType(item) }"
       @click="handleSwitchVideoViewType(item)"
     >
       <span
-        class="text-sm text-gray-600 group-hover:font-medium group-hover:text-gray-900"
-        :class="{ '!font-medium !text-gray-900': isActiveType(item) }"
+        class=":uno: text-sm text-gray-600 group-hover:font-medium group-hover:text-gray-900"
+        :class="{ ':uno: !font-medium !text-gray-900': isActiveType(item) }"
       >
         {{ item.title }}
       </span>

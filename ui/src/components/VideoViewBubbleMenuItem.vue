@@ -24,17 +24,17 @@ const props = withDefaults(
 </script>
 
 <template>
-  <VDropdown class="inline-flex" :triggers="['click']" :popper-triggers="['click']">
+  <VDropdown class=":uno: inline-flex" :triggers="['click']" :popper-triggers="['click']">
     <button
-      :class="{ 'bg-gray-200 !text-black': isActive({ editor }) }"
-      class="inline-flex h-full items-center gap-x-1 rounded-md p-2 text-base text-gray-600 hover:bg-gray-100"
+      :class="{ ':uno: bg-gray-200 !text-black': isActive({ editor }) }"
+      class=":uno: inline-flex h-full items-center gap-x-1 rounded-md p-2 text-base text-gray-600 hover:bg-gray-100"
     >
       <span>{{ type?.({ editor }).title }}</span>
       <MdiMenuDown />
     </button>
     <template #popper>
       <div
-        class="relative max-h-96 w-56 overflow-hidden overflow-y-auto rounded-md bg-white p-1 drop-shadow"
+        class=":uno: relative max-h-96 w-56 overflow-hidden overflow-y-auto rounded-md bg-white p-1 drop-shadow"
       >
         <KeepAlive>
           <VideoViewMenu v-bind="props"></VideoViewMenu>
@@ -43,7 +43,7 @@ const props = withDefaults(
     </template>
   </VDropdown>
 </template>
-<style>
+<style lang="scss">
 .v-popper__popper.v-popper__popper--show-from .v-popper__wrapper {
   transform: scale(0.9);
 }

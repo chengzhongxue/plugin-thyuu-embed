@@ -36,7 +36,6 @@
   padding: 1.5em;
   background-color: #fff;
   color: #1e1e1e;
-  border-radius: var(--admin-theme-radius);
   outline: thin solid var(--admin-theme-bg);
   line-height: 1;
 }

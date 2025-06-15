@@ -56,7 +56,7 @@ watch(
     <div class="thyuu-embed-block">
       <details class="thyuu-embed-refer">
         <summary>
-          <h5 class="icon-film"><i><IconMusic/></i>THYUU / 嵌入音乐</h5>
+          <h5><i><IconMusic/></i>THYUU / 嵌入音乐</h5>
           <i>
             <IconInfo/>
           </i>
@@ -74,7 +74,7 @@ watch(
         ref="inputRef"
         type="url"
         v-model.lazy="src"
-        class="block px-2 w-full py-1.5 text-sm text-gray-900 border border-gray-300 rounded-md bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+        class=":uno: block px-2 w-full py-1.5 text-sm text-gray-900 border border-gray-300 rounded-md bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
         placeholder="输入链接，按回车确定"
         tabindex="-1"
         @focus="handleSetFocus"
