@@ -7,8 +7,8 @@ export default definePlugin({
   routes: [],
   extensionPoints: {
     'default:editor:extension:create': async () => {
-      const { VideoExtension, MusicExtension, LivephotoExtension, DetailsExtension } = await import('@/editor');
-      return [VideoExtension, MusicExtension, LivephotoExtension,DetailsExtension];
+      const { VideoExtension, MusicExtension, LivephotoExtension } = await import('@/editor');
+      return [VideoExtension, MusicExtension, LivephotoExtension];
     },
   },
 });

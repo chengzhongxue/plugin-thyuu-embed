@@ -248,21 +248,3 @@ thyuu-embed iframe {
   filter: brightness(.5);
   scale: 1.05;
 }
-
-.block-details {
-  display: flex;
-  gap: 0.25rem;
-  border: 1px solid rgba(61, 37, 20, .12);
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-}
-
-.block-details summary {
-  font-weight: 700;
-  margin: 0.5em 0;
-}
-
-.markdown-body details {
-  margin-top: .75em !important;;
-  margin-bottom: 0 !important;;
-}
