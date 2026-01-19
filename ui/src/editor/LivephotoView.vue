@@ -3,14 +3,16 @@ import type {NodeViewProps} from "@halo-dev/richtext-editor";
 import { NodeViewWrapper } from "@halo-dev/richtext-editor";
 import {computed, ref} from "vue";
 import IconLivephoto from "@/icon/IconLivephoto.vue";
-import type {AttachmentLike} from "@halo-dev/console-shared";
+import {type AttachmentLike, utils} from "@halo-dev/ui-shared";
 import {getAttachmentUrl} from "@/utils/attachment";
 import IconAdd from "@/icon/IconAdd.vue";
 import IconFilm from "@/icon/IconFilm.vue";
 import IconImg from "@/icon/IconImg.vue";
 import IconInfo from "@/icon/IconInfo.vue";
-import { VDropdown, VDropdownItem } from "@halo-dev/components";
+import { VDropdown } from "@halo-dev/components";
 import CustomLinkDropdownItem from "@/components/CustomLinkDropdownItem.vue";
+import UploadDropdownItem from "@/components/UploadDropdownItem.vue";
+import AttachmentDropdownItem from "@/components/AttachmentDropdownItem.vue";
 
 const props = defineProps<NodeViewProps>();
 
@@ -32,8 +34,6 @@ const videoURL = computed({
   },
 });
 
-const  mediaType = ref<string>("image")
-
 const photoARN = computed({
   get: () => {
     return props.node?.attrs.photoARN;
@@ -51,13 +51,6 @@ const supportImageTypes: string[] = [
 ]
 
 const supportVideoTypes: string[] = ["video/*"];
-
-const attachmentSelectorModal = ref(false)
-
-function onAttachment (type: string) {
-  mediaType.value = type
-  attachmentSelectorModal.value = true
-}
 
 function onLinkReplace(type: string, url: string) {
   if(type === 'image') {
@@ -86,11 +79,11 @@ function getImageDimensions(url: string): Promise<{width: number, height: number
   });
 }
 
-async function onAttachmentSelect (attachments: AttachmentLike[]) {
+async function onAttachmentReplace(type: string, attachments: AttachmentLike[]) {
   if (attachments.length > 0) {
     const attachment = attachments[0];
     const attachmentAttr = getAttachmentUrl(attachment);
-    if (mediaType.value == 'image') {
+    if (type == 'image') {
       photoURL.value = attachmentAttr.url || ""
       if (photoURL.value) {
         const dimensions = await getImageDimensions(photoURL.value);
@@ -104,6 +97,19 @@ async function onAttachmentSelect (attachments: AttachmentLike[]) {
 }
 
 
+const canUploadAttachment = computed(() => {
+  return utils.permission.has([
+    "system:attachments:manage",
+    "uc:attachments:manage",
+  ]);
+});
+
+const canViewAttachment = computed(() => {
+  return utils.permission.has([
+    "system:attachments:view",
+    "uc:attachments:manage",
+  ]);
+});
 
 </script>
 
@@ -138,9 +144,10 @@ async function onAttachmentSelect (attachments: AttachmentLike[]) {
       <div class="thyuu-embed-panel thyuu-media-upload">
         <VDropdown
           :dispose-timeout="null"
+          class="thyuu-upbtn"
         >
           <template #default="{ shown }">
-            <button type="button" :class="`components-button ${ photoURL ? 'thyuu-upbtn icon-image has-obj' : 'thyuu-upbtn icon-add not-obj'}`" >
+            <button type="button" :class="`components-button thyuu-upbtn has-obj`" >
               <i>
                 <IconImg v-if="photoURL" />
                 <IconAdd v-else />
@@ -152,9 +159,16 @@ async function onAttachmentSelect (attachments: AttachmentLike[]) {
             </button>
           </template>
           <template #popper>
-            <VDropdownItem @click="onAttachment('image')">
-              从附件库选择
-            </VDropdownItem>
+            <UploadDropdownItem
+              v-if="canUploadAttachment"
+              :accepts="supportImageTypes"
+              @selected="(attachments: AttachmentLike[]) => onAttachmentReplace('image', attachments)"
+            />
+            <AttachmentDropdownItem
+              v-if="canViewAttachment"
+              :accepts="supportImageTypes"
+              @selected="(attachments: AttachmentLike[]) => onAttachmentReplace('image', attachments)"
+            />
             <CustomLinkDropdownItem
               :url="photoURL"
               @submit="(url: string) => onLinkReplace('image', url)"
@@ -164,9 +178,10 @@ async function onAttachmentSelect (attachments: AttachmentLike[]) {
 
         <VDropdown
           :dispose-timeout="null"
+          class="thyuu-upbtn"
         >
           <template #default="{ shown }">
-            <button type="button" :class="`components-button ${ videoURL ? 'thyuu-upbtn icon-film has-obj' : 'thyuu-upbtn icon-add not-obj'}` ">
+            <button type="button" :class="`components-button thyuu-upbtn not-obj` ">
               <i>
                 <IconFilm v-if="videoURL" />
                 <IconAdd v-else />
@@ -178,9 +193,16 @@ async function onAttachmentSelect (attachments: AttachmentLike[]) {
             </button>
           </template>
           <template #popper>
-            <VDropdownItem @click="onAttachment('video')">
-              从附件库选择
-            </VDropdownItem>
+            <UploadDropdownItem
+              v-if="canUploadAttachment"
+              :accepts="supportVideoTypes"
+              @selected="(attachments: AttachmentLike[]) => onAttachmentReplace('video', attachments)"
+            />
+            <AttachmentDropdownItem
+              v-if="canViewAttachment"
+              :accepts="supportVideoTypes"
+              @selected="(attachments: AttachmentLike[]) => onAttachmentReplace('video', attachments)"
+            />
             <CustomLinkDropdownItem
               :url="videoURL"
               @submit="(url: string) => onLinkReplace('video', url)"
@@ -189,13 +211,5 @@ async function onAttachmentSelect (attachments: AttachmentLike[]) {
         </VDropdown>
       </div>
     </div>
-    
-    <AttachmentSelectorModal
-      v-model:visible="attachmentSelectorModal"
-      :min="1"
-      :max="1"
-      :accepts="mediaType == 'image' ? supportImageTypes : supportVideoTypes"
-      @select="onAttachmentSelect"
-    />
   </node-view-wrapper>
 </template>

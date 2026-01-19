@@ -6,7 +6,7 @@ metadata:
     "store.halo.run/app-id": "app-lKYuv"
 spec:
   enabled: true
-  requires: ">=2.21.0"
+  requires: ">=2.22.0"
   author:
     name: 困困鱼 & THYUU
     website: https://kunkunyu.com
