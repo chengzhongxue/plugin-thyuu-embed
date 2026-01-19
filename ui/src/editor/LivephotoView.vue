@@ -9,6 +9,8 @@ import IconAdd from "@/icon/IconAdd.vue";
 import IconFilm from "@/icon/IconFilm.vue";
 import IconImg from "@/icon/IconImg.vue";
 import IconInfo from "@/icon/IconInfo.vue";
+import { VDropdown, VDropdownItem } from "@halo-dev/components";
+import CustomLinkDropdownItem from "@/components/CustomLinkDropdownItem.vue";
 
 const props = defineProps<NodeViewProps>();
 
@@ -57,6 +59,14 @@ function onAttachment (type: string) {
   attachmentSelectorModal.value = true
 }
 
+function onLinkReplace(type: string, url: string) {
+  if(type === 'image') {
+    photoURL.value = url;
+  }else {
+    videoURL.value = url;
+  }
+}
+
 function getImageDimensions(url: string): Promise<{width: number, height: number}> {
   return new Promise((resolve) => {
     const img = new Image();
@@ -93,6 +103,8 @@ async function onAttachmentSelect (attachments: AttachmentLike[]) {
   }
 }
 
+
+
 </script>
 
 <template>
@@ -124,28 +136,57 @@ async function onAttachmentSelect (attachments: AttachmentLike[]) {
         </ul>
       </details>
       <div class="thyuu-embed-panel thyuu-media-upload">
-        <button type="button" :class="`components-button ${ photoURL ? 'thyuu-upbtn icon-image has-obj' : 'thyuu-upbtn icon-add not-obj'}`" 
-                @click="onAttachment('image')">
-          <i>
-            <IconImg v-if="photoURL" />
-            <IconAdd v-else />
-          </i>
-          <template v-if="!photoURL">
-            选择图片
+        <VDropdown
+          :dispose-timeout="null"
+        >
+          <template #default="{ shown }">
+            <button type="button" :class="`components-button ${ photoURL ? 'thyuu-upbtn icon-image has-obj' : 'thyuu-upbtn icon-add not-obj'}`" >
+              <i>
+                <IconImg v-if="photoURL" />
+                <IconAdd v-else />
+              </i>
+              <template v-if="!photoURL">
+                选择图片
+              </template>
+              <img v-else class="media-obj" :src="photoURL"/>
+            </button>
           </template>
-          <img v-else class="media-obj" :src="photoURL"/>
-        </button>
-        <button type="button" :class="`components-button ${ videoURL ? 'thyuu-upbtn icon-film has-obj' : 'thyuu-upbtn icon-add not-obj'}` "
-                @click="onAttachment('video')">
-          <i>
-            <IconFilm v-if="videoURL" />
-            <IconAdd v-else />
-          </i>
-          <template v-if="!videoURL">
-            选择视频
+          <template #popper>
+            <VDropdownItem @click="onAttachment('image')">
+              从附件库选择
+            </VDropdownItem>
+            <CustomLinkDropdownItem
+              :url="photoURL"
+              @submit="(url: string) => onLinkReplace('image', url)"
+            />
           </template>
-          <video v-else class="media-obj" :src="videoURL"/>
-        </button>
+        </VDropdown>
+
+        <VDropdown
+          :dispose-timeout="null"
+        >
+          <template #default="{ shown }">
+            <button type="button" :class="`components-button ${ videoURL ? 'thyuu-upbtn icon-film has-obj' : 'thyuu-upbtn icon-add not-obj'}` ">
+              <i>
+                <IconFilm v-if="videoURL" />
+                <IconAdd v-else />
+              </i>
+              <template v-if="!videoURL">
+                选择视频
+              </template>
+              <video v-else class="media-obj" :src="videoURL"/>
+            </button>
+          </template>
+          <template #popper>
+            <VDropdownItem @click="onAttachment('video')">
+              从附件库选择
+            </VDropdownItem>
+            <CustomLinkDropdownItem
+              :url="videoURL"
+              @submit="(url: string) => onLinkReplace('video', url)"
+            />
+          </template>
+        </VDropdown>
       </div>
     </div>
     
