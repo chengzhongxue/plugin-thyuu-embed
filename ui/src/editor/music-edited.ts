@@ -137,6 +137,9 @@ const MusicExtension = Node.create({
           shouldShow: ({ state }: { state: EditorState }) => {
             return isActive(state, MusicExtension.name);
           },
+          options: {
+            placement: "top-start",
+          },
           items: [
             {
               priority: 30,

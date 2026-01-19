@@ -147,7 +147,7 @@ const canViewAttachment = computed(() => {
           class="thyuu-upbtn"
         >
           <template #default="{ shown }">
-            <button type="button" :class="`components-button thyuu-upbtn has-obj`" >
+            <button type="button" :class="`components-button thyuu-upbtn ${ photoURL ? 'has-obj' : 'not-obj'}`" >
               <i>
                 <IconImg v-if="photoURL" />
                 <IconAdd v-else />
@@ -181,7 +181,7 @@ const canViewAttachment = computed(() => {
           class="thyuu-upbtn"
         >
           <template #default="{ shown }">
-            <button type="button" :class="`components-button thyuu-upbtn not-obj` ">
+            <button type="button" :class="`components-button thyuu-upbtn ${ videoURL ? 'has-obj' : 'not-obj'}` ">
               <i>
                 <IconFilm v-if="videoURL" />
                 <IconAdd v-else />

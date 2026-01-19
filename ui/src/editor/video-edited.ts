@@ -145,6 +145,9 @@ const VideoExtension = Node.create({
           shouldShow: ({ state }: { state: EditorState }) => {
             return isActive(state, VideoExtension.name);
           },
+          options: {
+            placement: "top-start",
+          },
           items: [
             {
               priority: 20,

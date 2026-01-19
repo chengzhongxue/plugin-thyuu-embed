@@ -153,6 +153,9 @@ const LivephotoExtension = Node.create({
           shouldShow: ({ state }: { state: EditorState }) => {
             return isActive(state, LivephotoExtension.name);
           },
+          options: {
+            placement: "top-start",
+          },
           items: [
             {
               priority: 50,
