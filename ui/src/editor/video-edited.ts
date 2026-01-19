@@ -152,7 +152,9 @@ const VideoExtension = Node.create({
                 icon: markRaw(MdiShare),
                 title: "打开链接",
                 action: () => {
-                  window.open(editor.getAttributes(VideoExtension.name).src, "_blank");
+                  let src = editor.getAttributes(VideoExtension.name).src;
+                  const m = src.match(/<iframe[^>]*?\ssrc=["']([^"']+)["']/i)
+                  window.open(m ? m[1] : src, "_blank");
                 },
               },
             },
