@@ -5,7 +5,8 @@ import {
   nodeInputRule,
   type Range,
   VueNodeViewRenderer,
-  type EditorState, getNodeAttributes, mergeAttributes,
+  type EditorState, 
+  mergeAttributes,
 } from "@halo-dev/richtext-editor";
 import { markRaw } from "vue";
 import { ToolboxItem } from "@halo-dev/richtext-editor";
@@ -15,8 +16,6 @@ import MdiDeleteForeverOutline from "~icons/mdi/delete-forever-outline?color=red
 import { deleteNode } from "../utils/delete-node";
 import VideoView from "./VideoView.vue";
 import IconVideo from "@/icon/IconVideo.vue";
-import VideoViewBubbleMenuItem from "@/components/VideoViewBubbleMenuItem.vue";
-import videoViewTypes from "@/editor/video-view-type";
 
 declare module "@halo-dev/richtext-editor" {
   interface Commands<ReturnType> {
@@ -47,7 +46,7 @@ const VideoExtension = Node.create({
         },
       },
       size: {
-        default: null,
+        default: "",
         parseHTML: (element: HTMLElement) => {
           return element.getAttribute('size');
         },
@@ -149,16 +148,6 @@ const VideoExtension = Node.create({
           items: [
             {
               priority: 20,
-              component: markRaw(VideoViewBubbleMenuItem),
-              props: {
-                type: ({ editor }: { editor: Editor }) => {
-                  const attr = getNodeAttributes(editor.state, VideoExtension.name);
-                  return videoViewTypes.find((type) => type.key == attr.size) || videoViewTypes[0];
-                },
-              },
-            },
-            {
-              priority: 30,
               props: {
                 icon: markRaw(MdiShare),
                 title: "打开链接",

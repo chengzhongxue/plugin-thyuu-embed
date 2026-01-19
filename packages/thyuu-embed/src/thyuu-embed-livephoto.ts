@@ -5,7 +5,7 @@ export function getLivephoto() {
         const photoUrl = element.getAttribute("photo-url");
         const videoUrl = element.getAttribute("video-url");
         const photoArn = element.getAttribute("photo-arn");
-        var livephoto = `<thyuu-embed class="thyuu-noone icon-image">链接不存在<thyuu-embed>`
+        var livephoto = `<thyuu-embed class="thyuu-noone thyuu-icon-image">链接不存在<thyuu-embed>`
         if (photoUrl && videoUrl) {
             livephoto = `
              <thyuu-embed 

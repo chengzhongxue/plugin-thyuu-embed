@@ -30,14 +30,9 @@ const size = computed({
   },
 });
 
-function handleSetFocus() {
-  props.editor.commands.setNodeSelection(props.getPos());
-}
-const inputRef = ref();
-
 onMounted(() => {
   if (!src.value) {
-    inputRef.value.focus();
+    video.value = '';
   }else {
     getVideo(src.value);
   }
@@ -71,7 +66,7 @@ watch(
             <IconInfo/>
           </i>
         </summary>
-        <h6>支持平台及链接示例</h6>
+        <h6>方式一：支持平台及链接示例</h6>
         <ul>
           <li>bilibili - https://www.bilibili.com/video/<i>BV1Ec411z7j2</i></li>
           <li>bilibili直播 - https://live.bilibili.com/<i>00000000</i></li>
@@ -80,21 +75,30 @@ watch(
           <li>优酷视频 - https://v.youku.com/v_show/id_<i>XNDY5MjcyNTcy</i>.html</li>
         </ul>
         <p>考虑数据整洁，建议按格式复制并删除多余参数，标记颜色为必要参数</p>
+        <h6>方式二：直接嵌入平台iframe</h6>
+        <ul>
+          <li>若视频链接无法在上述解析，可直接嵌入平台提供的带 iframe 闭合标签的代码，即可自动解析成THYUU/区块格式。</li>
+        </ul>
         <h6>视频方向说明</h6>
         <ul>
-          <li>固定横屏(16 × 9) - 无论是在大屏和小屏时都固定横屏，适合横版的视频</li>
-          <li>适应竖屏(9 × 18) - 大屏时适应横屏，小屏时适应竖屏，适合竖版的视频</li>
+          <li>固定横屏(16 × 9)</li>
+          <li>适应竖屏(9 × 18)</li>
         </ul>
       </details>
-      <input
-        ref="inputRef"
-        type="url"
-        v-model.lazy="src"
-        class=":uno: block px-2 w-full py-1.5 text-sm text-gray-900 border border-gray-300 rounded-md bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-        placeholder="输入链接，按回车确定"
-        tabindex="-1"
-        @focus="handleSetFocus"
-      />
+      <div class="thyuu-embed-panel thyuu-basic-setin">
+        <input
+          type="url"
+          v-model="src"
+          class=":uno: block px-2 w-full py-1.5 text-sm text-gray-900 border border-gray-300 rounded-md bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="视频链接或 iframe代码"
+          tabindex="-1"
+        />
+        <select v-model="size">
+          <option value="">选择视频方向</option>
+          <option value="lr">固定横屏</option>
+          <option value="tb">适应竖屏</option>
+        </select>
+      </div>
       <div v-html="video"></div>
     </div>
   </node-view-wrapper>

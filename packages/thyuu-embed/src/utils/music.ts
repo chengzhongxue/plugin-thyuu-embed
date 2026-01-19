@@ -47,11 +47,11 @@ export function thyuuShortcodeMusic(url: string  | null): string {
   }
 
     if (!url) {
-        return `<thyuu-embed class="thyuu-noone icon-film">链接不存在<br></thyuu-embed>`
+        return `<thyuu-embed class="thyuu-noone thyuu-icon-film">链接不存在<br></thyuu-embed>`
     }
 
     if (!id) {
-        return `<thyuu-embed class="thyuu-noone icon-music">链接无法识别<br>${url}</thyuu-embed>`
+        return `<thyuu-embed class="thyuu-noone thyuu-icon-music">链接无法识别<br>${url}</thyuu-embed>`
     }
 
   let src: string;

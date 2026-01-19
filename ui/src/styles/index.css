@@ -101,12 +101,13 @@
 
 .thyuu-embed-block details ul i {
   color: var(--admin-theme-color, #3858e9);
+  font-style: normal;
 }
 
 .thyuu-embed-block :is(input[type="url"], select) {
   color: #1e1e1e;
   border: 0;
-  border-radius: 1.5em;
+  border-radius: 1em;
   background-color: var(--admin-theme-bg);
   width: auto;
   flex: 0;
